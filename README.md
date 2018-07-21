@@ -4,7 +4,7 @@ Build Status: [![travis build status](https://api.travis-ci.com/skwashd/alpine-d
 
 Docker Hub: [![skwashd/alpine:3.8 on docker hub](https://img.shields.io/docker/stars/skwashd/alpine.svg)](https://hub.docker.com/r/skwashd/alpine)
 
-Image Size: [![microbadger badge](https://img.shields.io/microbadger/image-size/skwashd/alpine-docker-from-scratch.svg)](https://microbadger.com/images/skwashd/alpine-docker-from-scratch)
+Image Size: [![microbadger badge](https://img.shields.io/microbadger/image-size/skwashd/alpine.svg)](https://microbadger.com/images/skwashd/alpine)
 
 This project builds an [Alpine Linux](https://alpinelinux.org/) docker image 
 from scratch using the upstream filesystem image. The official Alpine images 
