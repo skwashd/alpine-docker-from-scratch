@@ -2,7 +2,7 @@
 
 Build Status: [![travis build status](https://api.travis-ci.com/skwashd/alpine-docker-from-scratch.svg)](https://travis-ci.com/skwashd/alpine-docker-from-scratch)
 
-Docker Hub: [![skwashd/alpine:3.8 on docker hub](https://img.shields.io/docker/stars/skwashd/alpine-docker-from-scratch.svg)](https://hub.docker.com/r/skwashd/alpine-docker-from-scratch)
+Docker Hub: [![skwashd/alpine:3.8 on docker hub](https://img.shields.io/docker/stars/skwashd/alpine.svg)](https://hub.docker.com/r/skwashd/alpine)
 
 Image Size: [![microbadger badge](https://img.shields.io/microbadger/image-size/skwashd/alpine-docker-from-scratch.svg)](https://microbadger.com/images/skwashd/alpine-docker-from-scratch)
 
