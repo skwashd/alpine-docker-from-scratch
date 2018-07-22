@@ -12,6 +12,9 @@ DOCKER_ROOT=$(dirname $BUILD_TAR)
 POST_INSTALL="./post-install.sh"
 
 mkdir $DOCKER_ROOT
+MS_ROOT="${DOCKER_ROOT}/../microscanner"
+mkdir $MS_ROOT
+MS_ROOT=$(realpath $MS_ROOT)
 
 # Download rootfs builder and verify it.
 wget https://github.com/alpinelinux/alpine-make-rootfs/raw/af6880d17404e9811592092f0f8eb60959869ef5/alpine-make-rootfs -O "$MKROOTFS"
@@ -25,7 +28,7 @@ sudo ${MKROOTFS} --mirror-uri http://dl-cdn.alpinelinux.org/alpine/ \
 	"$BUILD_TAR" \
 	"$POST_INSTALL"
 
-cat <<DOCKERFILE > /tmp/docker/Dockerfile
+cat <<DOCKERFILE > "${DOCKER_ROOT}/Dockerfile"
 FROM scratch
 USER worker
 ADD $(basename $BUILD_TAR) /
@@ -34,4 +37,16 @@ DOCKERFILE
 
 cd $DOCKER_ROOT
 docker build --no-cache -t skwashd/alpine:3.8 .
+cd -
+
+cat <<DOCKERFILE > "${MS_ROOT}/Dockerfile"
+FROM skwashd/alpine:3.8
+USER root
+RUN wget https://get.aquasec.com/microscanner -O /home/worker/microscanner \
+  && chmod +x /home/worker/microscanner \
+  && /home/worker/microscanner $MS_TOKEN
+DOCKERFILE
+
+cd $MS_ROOT
+docker build .
 cd -
