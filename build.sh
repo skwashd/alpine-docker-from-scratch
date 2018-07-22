@@ -17,7 +17,7 @@ chmod +x ${MKROOTFS}
 
 sudo ${MKROOTFS} --mirror-uri http://dl-cdn.alpinelinux.org/alpine/ \
 	--branch "v${ALPINE_VER}" \
-	--packages 'ssl_client' \
+	--packages 'ssl_client ca-certificates' \
 	--script-chroot \
 	${BUILD_TAR} \
 	${POST_INSTALL}
