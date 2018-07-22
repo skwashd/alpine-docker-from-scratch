@@ -14,6 +14,9 @@ that my base image is up to date with the latest version of all packages.
 The build script adds a user called "worker". The Dockerfile uses this user so
 your workload isn't running as root in the container.
 
+Each build is checked for vulnerabilities using [Aqua Security's 
+microscanner](https://blog.aquasec.com/microscanner-free-image-vulnerability-scanner-for-developers).
+
 If you're worried about your docker image supply chain I would recommend that
 you fork this repo or use it as inspiration for your own project. This should
 allow you to be confident that you are using the latest version of Alpine
