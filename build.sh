@@ -14,7 +14,6 @@ POST_INSTALL="./post-install.sh"
 mkdir $DOCKER_ROOT
 MS_ROOT="${DOCKER_ROOT}/../microscanner"
 mkdir $MS_ROOT
-MS_ROOT=$(realpath $MS_ROOT)
 
 # Download rootfs builder and verify it.
 wget https://github.com/alpinelinux/alpine-make-rootfs/raw/af6880d17404e9811592092f0f8eb60959869ef5/alpine-make-rootfs -O "$MKROOTFS"
