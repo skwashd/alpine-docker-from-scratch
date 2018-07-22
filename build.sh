@@ -40,7 +40,6 @@ cd -
 
 cat <<DOCKERFILE > "${MS_ROOT}/Dockerfile"
 FROM skwashd/alpine:3.8
-USER root
 RUN wget https://get.aquasec.com/microscanner -O /home/worker/microscanner \
   && chmod +x /home/worker/microscanner \
   && /home/worker/microscanner $MS_TOKEN
