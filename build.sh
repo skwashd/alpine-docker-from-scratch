@@ -20,7 +20,7 @@ wget https://github.com/alpinelinux/alpine-make-rootfs/raw/af6880d17404e98115920
 echo "c93db7105060fb4227eeaaf9a98555308913090f71ece86d28eee8a376ab439f  $MKROOTFS" | sha256sum -c -
 chmod +x ${MKROOTFS}
 
-sudo ${MKROOTFS} --mirror-uri http://dl-cdn.alpinelinux.org/alpine \
+sudo ${MKROOTFS} --mirror-uri http://dl-2.alpinelinux.org/alpine \
 	--branch "v${ALPINE_VER}" \
 	--packages "$PACKAGES" \
 	--script-chroot \
