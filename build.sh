@@ -38,13 +38,11 @@ cd $DOCKER_ROOT
 docker build --no-cache -t skwashd/alpine:3.8 .
 cd -
 
-cat <<DOCKERFILE > "${MS_ROOT}/Dockerfile"
+docker build --build-arg MS_TOKEN="${MS_TOKEN}" - <<'DOCKERFILE'
 FROM skwashd/alpine:3.8
+ARG MS_TOKEN
 RUN wget https://get.aquasec.com/microscanner -O /home/worker/microscanner \
+  && echo "c7a278f9d0abbb6beb296360d20319be10bd7869db52574222bb9ea8bc14ba45  /home/worker/microscanner" | sha256sum -c - \
   && chmod +x /home/worker/microscanner \
   && /home/worker/microscanner $MS_TOKEN
 DOCKERFILE
-
-cd $MS_ROOT
-docker build .
-cd -
