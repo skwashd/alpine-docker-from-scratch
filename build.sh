@@ -42,7 +42,7 @@ docker build --build-arg MS_TOKEN="${MS_TOKEN}" - <<'DOCKERFILE'
 FROM skwashd/alpine:3.8
 ARG MS_TOKEN
 RUN wget https://get.aquasec.com/microscanner -O /home/worker/microscanner \
-  && echo "72fd95ef5d343915c37ad487ba83da56e4d79d2f999cbdb2bfb1afda0d6bd7bb  /home/worker/microscanner" | sha256sum -c - \
+  && echo "8e01415d364a4173c9917832c2e64485d93ac712a18611ed5099b75b6f44e3a5  /home/worker/microscanner" | sha256sum -c - \
   && chmod +x /home/worker/microscanner \
   && /home/worker/microscanner $MS_TOKEN
 DOCKERFILE
