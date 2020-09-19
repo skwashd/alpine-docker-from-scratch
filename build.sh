@@ -6,6 +6,7 @@
 
 set -ex
 
+DOCKER_USERNAME="${DOCKER_USERNAME:-skwashd}"
 ALPINE_VER="${ALPINE_VER:-3.10}"
 PACKAGES="apk-tools ca-certificates ssl_client"
 
@@ -38,10 +39,10 @@ CMD ["/bin/sh"]
 DOCKERFILE
 
 cd $DOCKER_ROOT
-docker build --no-cache -t "skwashd/alpine:${ALPINE_VER}" .
+docker build --no-cache -t "${DOCKER_USERNAME}/alpine:${ALPINE_VER}" .
 cd -
 
-docker build  --build-arg BASE_IMAGE="skwashd/alpine:${ALPINE_VER}" --build-arg MS_TOKEN="${MS_TOKEN}" - <<'DOCKERFILE'
+docker build  --build-arg BASE_IMAGE="${DOCKER_USERNAME}/alpine:${ALPINE_VER}" --build-arg MS_TOKEN="${MS_TOKEN}" - <<'DOCKERFILE'
 ARG BASE_IMAGE
 FROM $BASE_IMAGE
 ARG MS_TOKEN

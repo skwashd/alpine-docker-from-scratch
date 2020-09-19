@@ -9,7 +9,6 @@ env:
     - secure: "jxKwiOE9mfRfn8M7TF8wJA5WGVP91qHhyUOPfZqKmqxCG671S2iEwznmI7PfWCiuBDV4e9c6tBc6QmBym077+TbRnKqmSw5vp5mMGHXSv7WvJYORidvQCNgO19Ir+OpTHeAVdIC8Eb53I2sz1IklQTyrXQFNXyJnm2+veJ6JAcNFVEBvd9f+gXlCVSlUMN25gtceov6l38sWET4HI6+ey1thdlmsqSegAZIrlmHrmqLgdkjBJNGjx7IU2FS4kX3fXCv/axSrwxgPeJ9hpDD4IlO37SbPaB7HfrAfbQF3cQQ3+mlEWDMfsIsSZl4HKNMXoonzEzwo6kI2B+CmsXwGWXnxG8zKp5Q+dBP4PiKIQlvN9makEpaQVt4DeuZgO2TZYmeS4565YDfblp1dJXAtP32NQwbwwyC2gQCYN5FIxjH+C2HtCVQiZ9Gik9zeXg0aAGm+AZmvFjTgfH/Daq2cqDk7TjtyrV27xPTCfQ3AVQXLAUZcyiRpPw8pl3dSp5cOWwwbL9wssR4LUBRGAOfM322UEgpaEhSovAnygIPLV+SVVLp20euide+Uxb13X7la+5S7OJFJk+TpSXTeUYPxiEuLVMl2ySFVT/4lzvL9zjwoNwEsPsjvJI40UMxfhm7/mPR2iD84xEG/vdHQ50bFcOmRRuq3fQfOt3i6DqC5PVU="
     # Docker hub password
     - secure: "mfNaZOwEG54Gjq+PMzDepMJVy+bG60f/7hoflZuvPq9SJmMJVlWHNxTG3XC1IqJnwZ4N2H/91K8ZFG6KqHZBIyi8IB372HGADbCyZHVz34n3AFnCwgptKIn2H+0mtTUWr+TuH2itgKxN8JScSSCNMhN1+C6dcXf/fj2Dx3ZbnlxcKAIAf6r9JlEcZUu/EnB5BL4EzQ7jvhIkrJ4NAGrogkBsTpLmaCLe9c3NZ5e8OolNpXoSDgypcVtYMud7jxUCSBrAX1JpgXynNodGF0sbi6ml+FhNj03gRbCM1iwwWuH3fWl5lTbQXFtFw7qbp6yAhVhGAs2saFMVyZghkT8ENW2zsfBI82pyQj2V7XT5Nb9n/1A75lxKgl+T3pZZ5/o7e4A+tlWJTkNZ37hsTFr1AR1q8qGBbzVrttaFxp8ueetwN1c6vMevHKo9NkBNv4PeDbh/MUYS7xw6JfSQhzNy9CCYe7eyBHJNC9GuQ19nUIHYeO6l4AtE9wuV4eA+m00OPJdEwa6jfE1ZtSlfAW3NP06NUcKaGeYa+H6FXTpCRkUSBlGusveegx/A7xnu4XOWgT+9ZkHoTg6WJfULnpGBV2t+Yiats39Hct+ABnkuLLx6itn6Dnkf0lBCF8lPiYvWcEFdVqWm0WQ+EaA0ArEpFuWg6Y9buXHxHKqRghr0Fto="
-    - DOCKER_USERNAME="skwashd"
     - ALPINE_VER="3.10"
 
 install: true
@@ -25,6 +24,6 @@ before_deploy:
 
 deploy:
   provider: script
-  script: docker push "skwashd/alpine:${ALPINE_VER}"
+  script: docker push "${DOCKER_USERNAME}/alpine:${ALPINE_VER}"
   on:
     branch: main
