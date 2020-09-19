@@ -19,8 +19,8 @@ MS_ROOT="${DOCKER_ROOT}/../microscanner"
 mkdir $MS_ROOT
 
 # Download rootfs builder and verify it.
-wget https://github.com/alpinelinux/alpine-make-rootfs/raw/af6880d17404e9811592092f0f8eb60959869ef5/alpine-make-rootfs -O "$MKROOTFS"
-echo "c93db7105060fb4227eeaaf9a98555308913090f71ece86d28eee8a376ab439f  $MKROOTFS" | sha256sum -c -
+wget https://raw.githubusercontent.com/alpinelinux/alpine-make-rootfs/v0.5.1/alpine-make-rootfs -O "$MKROOTFS"
+echo "5413d0114d92abde279c9e2e65c9e8536e7eaca71f60e72e31bf13c7b5f16436  $MKROOTFS" | sha256sum -c -
 chmod +x ${MKROOTFS}
 
 sudo ${MKROOTFS} --mirror-uri http://dl-2.alpinelinux.org/alpine \
