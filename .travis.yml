@@ -27,4 +27,4 @@ deploy:
   provider: script
   script: docker push "skwashd/alpine:${ALPINE_VER}"
   on:
-    branch: master
+    branch: main
