@@ -1,7 +1,5 @@
-sudo: required
-
-services:
-  - docker
+language: minimal
+dist: focal
 
 env:
   global:
