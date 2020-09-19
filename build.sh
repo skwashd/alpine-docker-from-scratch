@@ -1,10 +1,13 @@
 #!/bin/sh
+#
+# Copyright (c) 2018-2020 Dave Hall <skwashd@gmail.com>
+# MIT Licensed, see LICENSE for more information.
+#
 
-set -e
+set -ex
 
 ALPINE_VER="3.8"
 PACKAGES="apk-tools ca-certificates ssl_client"
-
 
 MKROOTFS="/tmp/alpine-make-rootfs"
 BUILD_TAR="/tmp/docker/alpine-rootfs-${ALPINE_VER}.tar.gz"
