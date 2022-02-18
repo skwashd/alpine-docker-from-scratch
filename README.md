@@ -15,7 +15,7 @@ The build script adds a user called "worker". The Dockerfile uses this user so
 your workload isn't running as root in the container.
 
 Each build is checked for vulnerabilities using [Aqua Security's
-microscanner](https://blog.aquasec.com/microscanner-free-image-vulnerability-scanner-for-developers).
+trivy](https://www.aquasec.com/products/trivy/).
 
 If you're worried about your docker image supply chain I recommend you fork
 this repo or use it as inspiration for your own project. This should allow
@@ -29,7 +29,6 @@ You must configure the following environment for the build to work:
 
 * `DOCKER_USERNAME` - Your Docker Hub username
 * `DOCKER_PASSWORD` - Your [Docker Hub access token](https://docs.docker.com/docker-hub/access-tokens/) (or password)
-* `MS_TOKEN` - Your  [Aqua Security microscanner](https://blog.aquasec.com/microscanner-free-image-vulnerability-scanner-for-developers) access token
 
 ## Support
 I will maintain this while I am using images based off it on a best effort
