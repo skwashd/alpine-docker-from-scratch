@@ -7,7 +7,7 @@
 set -ex
 
 DOCKER_USERNAME="${DOCKER_USERNAME:-skwashd}"
-ALPINE_VER="${ALPINE_VER:-3.10}"
+ALPINE_VER="${ALPINE_VER:-latest-stable}"
 PACKAGES="apk-tools ca-certificates ssl_client"
 
 MKROOTFS="/tmp/alpine-make-rootfs"
@@ -25,7 +25,7 @@ echo "5413d0114d92abde279c9e2e65c9e8536e7eaca71f60e72e31bf13c7b5f16436  $MKROOTF
 chmod +x ${MKROOTFS}
 
 sudo ${MKROOTFS} --mirror-uri http://dl-2.alpinelinux.org/alpine \
-	--branch "v${ALPINE_VER}" \
+	--branch "${ALPINE_VER}" \
 	--packages "$PACKAGES" \
 	--script-chroot \
 	"$BUILD_TAR" \
