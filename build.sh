@@ -18,8 +18,7 @@ POST_INSTALL="./post-install.sh"
 mkdir $DOCKER_ROOT
 
 # Download rootfs builder and verify it.
-wget https://raw.githubusercontent.com/alpinelinux/alpine-make-rootfs/v0.5.1/alpine-make-rootfs -O "$MKROOTFS"
-echo "5413d0114d92abde279c9e2e65c9e8536e7eaca71f60e72e31bf13c7b5f16436  $MKROOTFS" | sha256sum -c -
+wget https://raw.githubusercontent.com/alpinelinux/alpine-make-rootfs/v0.6.0/alpine-make-rootfs -O "$MKROOTFS"
 chmod +x ${MKROOTFS}
 
 sudo ${MKROOTFS} --mirror-uri http://dl-2.alpinelinux.org/alpine \
