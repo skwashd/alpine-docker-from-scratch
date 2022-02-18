@@ -3,7 +3,7 @@ dist: focal
 
 env:
   global:
-    - ALPINE_VER="3.10"
+    - ALPINE_VER="latest-stable"
 
 install: true
 
