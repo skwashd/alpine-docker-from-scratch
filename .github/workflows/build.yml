@@ -1,0 +1,123 @@
+name: Build Image
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '30 2 * * *'
+
+env:
+  PACKAGES: "apk-tools ca-certificates ssl_client"
+  ROOTFS_HASH: "4ad7d08ba6dbbf4473c8438371e1532baeb7843ac964e589ae1efcf128feeae3"
+  ROOTFS_VERSION: "v0.6.1"
+  POST_INSTALL: "./post-install.sh"
+
+jobs:
+
+  build-image:
+    runs-on: ubuntu-latest
+    name: Build Image
+
+    strategy:
+      matrix:
+        version: ["3.17", "3.16", "3.15", "3.14"]
+
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      BUILD_TAR: "/tmp/docker-${{ matrix.version }}/alpine-rootfs.tar.gz"
+      DOCKER_IMAGE: "ghcr.io/${{ github.repository_owner }}/alpine"
+      DOCKER_ROOT: "/tmp/docker-${{ matrix.version }}"
+      DOCKER_TAG: ${{ matrix.version }}
+      MKROOTFS: "/tmp/alpine-make-rootfs-${{ matrix.version }}"
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch MakeRootFS Util
+        id: fetch-makerootfs
+        run: |
+          wget https://raw.githubusercontent.com/alpinelinux/alpine-make-rootfs/${{ env.ROOTFS_VERSION }}/alpine-make-rootfs -O "${{ env.MKROOTFS }}"
+          echo "${{ env.ROOTFS_HASH }}  ${{ env.MKROOTFS }}" | sha256sum -c -
+          chmod +x ${{ env.MKROOTFS }}
+
+      - name: Build Filesystem
+        id: build-fs
+        run: |
+          mkdir ${{ env.DOCKER_ROOT }}
+          sudo ${{ env.MKROOTFS }} --mirror-uri https://dl-2.alpinelinux.org/alpine \
+            --branch "v${{ matrix.version }}" \
+            --packages "${{ env.PACKAGES }}" \
+            --script-chroot \
+            "${{ env.BUILD_TAR }}" \
+            "${{ env.POST_INSTALL }}"
+
+      - name: Prepare Dockerfile
+        id: prepare-dockerfile
+        run: |
+          cat <<DOCKERFILE > "${{ env.DOCKER_ROOT }}/Dockerfile"
+          FROM scratch
+          ADD $(basename ${{ env.BUILD_TAR }}) /
+          CMD ["/bin/sh"]
+          DOCKERFILE
+
+      - name: Extract Docker Metadata
+        id: meta
+        uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96
+        with:
+          images:
+            ${{ env.DOCKER_IMAGE }}
+          tags:
+            ${{ env.DOCKER_TAG }}
+
+      - name: Build Docker Image
+        id: build-image
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ env.DOCKER_ROOT }}
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Run Trivy
+        id: trivy
+        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
+        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5 # v0.8.0
+        with:
+          image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
+          format: 'sarif'
+          output: 'trivy-results-${{ matrix.version }}.sarif'
+
+      - name: Run Trivy (PR only)
+        id: trivy-pr
+        if: ${{ github.ref != 'refs/heads/main' || (github.event_name != 'push' && github.event_name != 'schedule') }}
+        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5 # v0.8.0
+        with:
+          image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
+          format: 'table'
+          severity: 'MEDIUM,HIGH,CRITICAL'
+
+      - name: Upload Trivy Results to GitHub Security tab
+        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results-${{ matrix.version }}.sarif'
+
+      - name: Login to Github Container Registry
+        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Image
+        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
+        run: docker push "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
