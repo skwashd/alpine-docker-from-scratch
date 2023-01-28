@@ -28,6 +28,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
 
     env:
       BUILD_TAR: "/tmp/docker-${{ matrix.version }}/alpine-rootfs.tar.gz"
@@ -106,7 +107,7 @@ jobs:
 
       - name: Upload Trivy Results to GitHub Security tab
         if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results-${{ matrix.version }}.sarif'
 
