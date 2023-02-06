@@ -1,6 +1,6 @@
 # Alpine Linux from Scratch
 
-This project builds a [Alpine Linux](https://alpinelinux.org/) docker images
+This project builds [Alpine Linux](https://alpinelinux.org/) docker images
 from scratch using the upstream filesystem image. The official Alpine images
 on docker hub can lag a little behind the official releases. I would prefer
 that my base image is up to date with the latest version of all packages.
