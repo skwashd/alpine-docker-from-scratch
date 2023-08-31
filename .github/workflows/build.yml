@@ -11,8 +11,8 @@ on:
 
 env:
   PACKAGES: "apk-tools ca-certificates ssl_client"
-  ROOTFS_HASH: "4ad7d08ba6dbbf4473c8438371e1532baeb7843ac964e589ae1efcf128feeae3"
-  ROOTFS_VERSION: "v0.6.1"
+  ROOTFS_HASH: "91ceb95b020260832417b01e45ce02c3a250c4527835d1bdf486bf44f80287dc"
+  ROOTFS_VERSION: "v0.7.0"
   POST_INSTALL: "./post-install.sh"
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
 
     strategy:
       matrix:
-        version: ["3.17", "3.16", "3.15", "3.14"]
+        version: ["3.18", "3.17", "3.16", "3.15"]
 
     permissions:
       contents: read
