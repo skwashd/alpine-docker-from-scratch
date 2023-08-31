@@ -24,7 +24,7 @@ wget https://raw.githubusercontent.com/alpinelinux/alpine-make-rootfs/v0.5.1/alp
 echo "5413d0114d92abde279c9e2e65c9e8536e7eaca71f60e72e31bf13c7b5f16436  $MKROOTFS" | sha256sum -c -
 chmod +x ${MKROOTFS}
 
-sudo ${MKROOTFS} --mirror-uri http://dl-2.alpinelinux.org/alpine \
+sudo ${MKROOTFS} --mirror-uri https://dl-cdn.alpinelinux.org/alpine \
 	--branch "v${ALPINE_VER}" \
 	--packages "$PACKAGES" \
 	--script-chroot \

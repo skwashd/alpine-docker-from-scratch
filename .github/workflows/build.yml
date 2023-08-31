@@ -53,7 +53,7 @@ jobs:
         id: build-fs
         run: |
           mkdir ${{ env.DOCKER_ROOT }}
-          sudo ${{ env.MKROOTFS }} --mirror-uri https://dl-2.alpinelinux.org/alpine \
+          sudo ${{ env.MKROOTFS }} --mirror-uri https://dl-cdn.alpinelinux.org/alpine \
             --branch "v${{ matrix.version }}" \
             --packages "${{ env.PACKAGES }}" \
             --script-chroot \
