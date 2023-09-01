@@ -1,0 +1,22 @@
+name: Prune Old Images
+
+on:
+  schedule:
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  prune-images:
+    name: Prune Untagged Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: bots-house/ghcr-delete-image-action@3827559c68cb4dcdf54d813ea9853be6d468d3a4 # v1.1.0
+        with:
+          owner: skwashd
+          name: alpine-docker-from-scratch
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # Keep latest N untagged images
+          untagged-keep-latest: 3
