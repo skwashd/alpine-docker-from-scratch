@@ -71,7 +71,7 @@ jobs:
 
       - name: Extract Docker Metadata
         id: meta
-        uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96
+        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # 5.6.1
         with:
           images:
             ${{ env.DOCKER_IMAGE }}
@@ -90,7 +90,7 @@ jobs:
       - name: Run Trivy
         id: trivy
         if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
-        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5 # v0.8.0
+        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
         with:
           image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
           format: 'sarif'
@@ -99,7 +99,7 @@ jobs:
       - name: Run Trivy (PR only)
         id: trivy-pr
         if: ${{ github.ref != 'refs/heads/main' || (github.event_name != 'push' && github.event_name != 'schedule') }}
-        uses: aquasecurity/trivy-action@9ab158e8597f3b310480b9a69402b419bc03dbd5 # v0.8.0
+        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
         with:
           image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
           format: 'table'
