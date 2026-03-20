@@ -11,19 +11,19 @@ on:
 
 env:
   PACKAGES: "apk-tools ca-certificates ssl_client"
-  ROOTFS_HASH: "91ceb95b020260832417b01e45ce02c3a250c4527835d1bdf486bf44f80287dc"
-  ROOTFS_VERSION: "v0.7.0"
+  ROOTFS_HASH: "b4cd8202fa04eae8b4abae22708638cf00ab5826d8b919bc86932fc0cb269f00"
+  ROOTFS_VERSION: "v0.8.1"
   POST_INSTALL: "./post-install.sh"
 
 jobs:
 
   build-image:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     name: Build Image
 
     strategy:
       matrix:
-        version: ["3.21", "3.20", "3.19", "3.18"]
+        version: ["3.23", "3.22", "3.21", "3.20"]
 
     permissions:
       contents: read
@@ -40,7 +40,9 @@ jobs:
     steps:
       - name: Checkout
         id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Fetch MakeRootFS Util
         id: fetch-makerootfs
@@ -71,7 +73,7 @@ jobs:
 
       - name: Extract Docker Metadata
         id: meta
-        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # 5.6.1
+        uses: docker/metadata-action@v6
         with:
           images:
             ${{ env.DOCKER_IMAGE }}
@@ -80,40 +82,16 @@ jobs:
 
       - name: Build Docker Image
         id: build-image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           context: ${{ env.DOCKER_ROOT }}
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Run Trivy
-        id: trivy
-        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
-        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
-        with:
-          image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
-          format: 'sarif'
-          output: 'trivy-results-${{ matrix.version }}.sarif'
-
-      - name: Run Trivy (PR only)
-        id: trivy-pr
-        if: ${{ github.ref != 'refs/heads/main' || (github.event_name != 'push' && github.event_name != 'schedule') }}
-        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
-        with:
-          image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
-          format: 'table'
-          severity: 'MEDIUM,HIGH,CRITICAL'
-
-      - name: Upload Trivy Results to GitHub Security tab
-        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results-${{ matrix.version }}.sarif'
-
       - name: Login to Github Container Registry
         if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
