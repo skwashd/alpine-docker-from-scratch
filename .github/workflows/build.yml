@@ -87,30 +87,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Run Trivy
-        id: trivy
-        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
-        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
-        with:
-          image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
-          format: 'sarif'
-          output: 'trivy-results-${{ matrix.version }}.sarif'
-
-      - name: Run Trivy (PR only)
-        id: trivy-pr
-        if: ${{ github.ref != 'refs/heads/main' || (github.event_name != 'push' && github.event_name != 'schedule') }}
-        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0 # v0.29.0
-        with:
-          image-ref: "${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }}"
-          format: 'table'
-          severity: 'MEDIUM,HIGH,CRITICAL'
-
-      - name: Upload Trivy Results to GitHub Security tab
-        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results-${{ matrix.version }}.sarif'
-
       - name: Login to Github Container Registry
         if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'schedule') }}
         uses: docker/login-action@v2
