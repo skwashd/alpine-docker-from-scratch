@@ -1,0 +1,25 @@
+name: Cleanup Untagged Images
+on:
+  schedule:
+    - cron: '0 4 * * 0'
+  workflow_dispatch:
+
+env:
+  PACKAGE_NAME: "alpine"
+
+jobs:
+  cleanup-untagged:
+    runs-on: ubuntu-24.04
+    name: Purge Untagged Images
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: Delete Untagged Images
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ env.PACKAGE_NAME }}
+          package-type: 'container'
+          min-versions-to-keep: 0
+          delete-only-untagged-versions: 'true'
