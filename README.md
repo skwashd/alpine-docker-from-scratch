@@ -11,9 +11,6 @@ Linux for amd64.
 The build script adds a user called "worker". This makes it easier to run 
 your workload as a non privileged user in the container.
 
-Each build is checked for vulnerabilities using [Aqua Security's
-trivy](https://aquasecurity.github.io/trivy).
-
 If you're worried about your docker image supply chain I recommend you fork
 this repo or use it as inspiration for your own project. This should allow
 you to be confident that you are using the latest version of Alpine Linux
